@@ -1,8 +1,8 @@
 package org.minimax;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+
+import static org.minimax.Constants.COUNT_TO_WIN;
 
 public class Board implements BoardInterface {
 
@@ -65,60 +65,135 @@ public class Board implements BoardInterface {
 
 	// endregion
 
+	/**
+	 * Returns whether the given color has won after playing in the given column.
+	 * This should be called after {@link Board#play(Cell, int)} with the same arguments.
+	 */
+	public boolean hasWon(final Cell color, final int column) {
+		final int cellX = column;
+		final int cellY = m_height - m_columnHeights[column];
+
+		// Row
+		int count = 0;
+		for (int x = cellX - (COUNT_TO_WIN - 1); x < cellX + COUNT_TO_WIN; x++) {
+			if (x < 0 || x >= m_width) continue;
+			count = (m_board[cellY][x] == color ? count + 1 : 0);
+		}
+		if (count >= COUNT_TO_WIN) return true;
+
+		// Column
+		count = 0;
+		for (int y = cellY - (COUNT_TO_WIN - 1); y < cellX + COUNT_TO_WIN; y++) {
+			if (y < 0 || y >= m_height) continue;
+			count = (m_board[y][cellX] == color ? count + 1 : 0);
+		}
+		if (count >= COUNT_TO_WIN) return true;
+
+		// Diagonal (top left -> bottom right)
+		count = 0;
+		for (int k = -(COUNT_TO_WIN - 1); k < COUNT_TO_WIN; k++) {
+			final int x = cellX + k;
+			final int y = cellY + k;
+			if (x < 0 || x >= m_width || y < 0 || y >= m_height) continue;
+			count = (m_board[y][x] == color ? count + 1 : 0);
+		}
+		if (count >= COUNT_TO_WIN) return true;
+
+		// Diagonal (top right -> bottom left)
+		count = 0;
+		for (int k = -(COUNT_TO_WIN - 1); k < COUNT_TO_WIN; k++) {
+			final int x = cellX + k;
+			final int y = cellY - k;
+			if (x < 0 || x >= m_width || y < 0 || y >= m_height) continue;
+			count = (m_board[y][x] == color ? count + 1 : 0);
+		}
+		return count >= COUNT_TO_WIN;
+	}
+
 	public Optional<Cell> getWinner() {
+		final int[] count = new int[Cell.COLORS.size()];
+
 		// Rows
 		for (int y = 0; y < m_height; y++) {
-			int yellow = 0;
-			int red = 0;
+			Arrays.fill(count, 0);
+
 			for (int x = 0; x < m_width; x++) {
 				final Cell cell = m_board[y][x];
-				red = (cell == Cell.RED ? red + 1 : 0);
-				yellow = (cell == Cell.YELLOW ? yellow + 1 : 0);
+				for (final Cell color : Cell.COLORS) {
+					if (cell == color) {
+						count[cell.getId()]++;
+					} else {
+						count[cell.getId()] = 0;
+					}
+				}
 			}
-			if (red >= Constants.COUNT_TO_WIN) return Optional.of(Cell.RED);
-			if (yellow >= Constants.COUNT_TO_WIN) return Optional.of(Cell.YELLOW);
+
+			for (final Cell color : Cell.COLORS) {
+				if (count[color.getId()] >= COUNT_TO_WIN) return Optional.of(color);
+			}
 		}
 
 		// Columns
 		for (int x = 0; x < m_width; x++) {
-			int yellow = 0;
-			int red = 0;
+			Arrays.fill(count, 0);
+
 			for (int y = 0; y < m_height; y++) {
 				final Cell cell = m_board[y][x];
-				red = (cell == Cell.RED ? red + 1 : 0);
-				yellow = (cell == Cell.YELLOW ? yellow + 1 : 0);
+				for (final Cell color : Cell.COLORS) {
+					if (cell == color) {
+						count[cell.getId()]++;
+					} else {
+						count[cell.getId()] = 0;
+					}
+				}
 			}
-			if (red >= Constants.COUNT_TO_WIN) return Optional.of(Cell.RED);
-			if (yellow >= Constants.COUNT_TO_WIN) return Optional.of(Cell.YELLOW);
+
+			for (final Cell color : Cell.COLORS) {
+				if (count[color.getId()] >= COUNT_TO_WIN) return Optional.of(color);
+			}
 		}
 
 		// Diagonals (top left -> bottom right)
-		for (int y = 0; y < m_height - (Constants.COUNT_TO_WIN - 1); y++) {
-			for (int x = 0; x < m_width - (Constants.COUNT_TO_WIN - 1); x++) {
-				int yellow = 0;
-				int red = 0;
-				for (int k = 0; k < Constants.COUNT_TO_WIN; k++) {
+		for (int y = 0; y < m_height - (COUNT_TO_WIN - 1); y++) {
+			for (int x = 0; x < m_width - (COUNT_TO_WIN - 1); x++) {
+				Arrays.fill(count, 0);
+
+				for (int k = 0; k < COUNT_TO_WIN; k++) {
 					final Cell cell = m_board[y + k][x + k];
-					red = (cell == Cell.RED ? red + 1 : 0);
-					yellow = (cell == Cell.YELLOW ? yellow + 1 : 0);
+					for (final Cell color : Cell.COLORS) {
+						if (cell == color) {
+							count[cell.getId()]++;
+						} else {
+							count[cell.getId()] = 0;
+						}
+					}
 				}
-				if (red >= Constants.COUNT_TO_WIN) return Optional.of(Cell.RED);
-				if (yellow >= Constants.COUNT_TO_WIN) return Optional.of(Cell.YELLOW);
+
+				for (final Cell color : Cell.COLORS) {
+					if (count[color.getId()] >= COUNT_TO_WIN) return Optional.of(color);
+				}
 			}
 		}
 
 		// Diagonals (top right -> bottom left)
-		for (int y = Constants.COUNT_TO_WIN - 1; y < m_height; y++) {
-			for (int x = 0; x < m_width - (Constants.COUNT_TO_WIN - 1); x++) {
-				int yellow = 0;
-				int red = 0;
-				for (int k = 0; k < Constants.COUNT_TO_WIN; k++) {
+		for (int y = COUNT_TO_WIN - 1; y < m_height; y++) {
+			for (int x = 0; x < m_width - (COUNT_TO_WIN - 1); x++) {
+				Arrays.fill(count, 0);
+
+				for (int k = 0; k < COUNT_TO_WIN; k++) {
 					final Cell cell = m_board[y - k][x + k];
-					red = (cell == Cell.RED ? red + 1 : 0);
-					yellow = (cell == Cell.YELLOW ? yellow + 1 : 0);
+					for (final Cell color : Cell.COLORS) {
+						if (cell == color) {
+							count[cell.getId()]++;
+						} else {
+							count[cell.getId()] = 0;
+						}
+					}
 				}
-				if (red >= Constants.COUNT_TO_WIN) return Optional.of(Cell.RED);
-				if (yellow >= Constants.COUNT_TO_WIN) return Optional.of(Cell.YELLOW);
+
+				for (final Cell color : Cell.COLORS) {
+					if (count[color.getId()] >= COUNT_TO_WIN) return Optional.of(color);
+				}
 			}
 		}
 
