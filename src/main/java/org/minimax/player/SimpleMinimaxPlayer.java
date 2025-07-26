@@ -6,8 +6,11 @@ import org.minimax.Color;
 import java.util.List;
 
 public class SimpleMinimaxPlayer extends MinimaxPlayer {
-	public SimpleMinimaxPlayer(final Color color, final List<Color> players) {
+	private final int m_maxDepth;
+
+	public SimpleMinimaxPlayer(final Color color, final List<Color> players, final int maxDepth) {
 		super(color, players);
+		m_maxDepth = maxDepth;
 	}
 
 	@Override
@@ -16,7 +19,7 @@ public class SimpleMinimaxPlayer extends MinimaxPlayer {
 
 	@Override
 	protected int getMaxDepth() {
-		return 3;
+		return m_maxDepth;
 	}
 
 	@Override
@@ -26,6 +29,6 @@ public class SimpleMinimaxPlayer extends MinimaxPlayer {
 
 	@Override
 	protected String name() {
-		return "SimpleMinimax";
+		return "SimpleMinimax-" + m_maxDepth;
 	}
 }

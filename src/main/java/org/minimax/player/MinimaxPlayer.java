@@ -23,6 +23,9 @@ public abstract class MinimaxPlayer extends Player {
 
 	@Override
 	public int play(final Board board) {
+		final List<Integer> playableColumns = board.getPlayableColumns();
+		if (playableColumns.size() == 1) return playableColumns.get(0);
+
 		final Result result = minimax(board, null, 0, true);
 		return result.bestColumns.get(m_random.nextInt(result.bestColumns.size()));
 	}
