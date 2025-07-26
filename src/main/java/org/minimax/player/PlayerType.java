@@ -17,6 +17,13 @@ public enum PlayerType {
 			return new RandomPlayer(color, players);
 		}
 	},
+
+	SIMPLE_MINIMAX {
+		@Override
+		public Player instantiate(final Color color, final List<Color> players) {
+			return new SimpleMinimaxPlayer(color, players);
+		}
+	}
 	;
 
 	public abstract Player instantiate(final Color color, final List<Color> players);

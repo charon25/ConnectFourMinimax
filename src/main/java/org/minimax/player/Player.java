@@ -33,6 +33,10 @@ public abstract class Player {
 		return m_players.size();
 	}
 
+	public List<Color> getPlayers() {
+		return m_players;
+	}
+
 	public abstract void init();
 
 	// Use interface so players cannot alter the board directly
