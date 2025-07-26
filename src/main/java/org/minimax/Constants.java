@@ -11,7 +11,7 @@ public final class Constants {
 
 	public static final String ANSI_COLOR_RESET = "\033[0m";
 
-	public static final int MAX_PLAYER_COUNT = Cell.COLORS.size();
+	public static final int MAX_PLAYER_COUNT = Color.COLORS.size();
 	public static final int DEFAULT_PLAYER_COUNT = 2;
 	public static final int DEFAULT_WIDTH = 7;
 	public static final int DEFAULT_HEIGHT = 6;

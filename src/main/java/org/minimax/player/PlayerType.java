@@ -1,6 +1,6 @@
 package org.minimax.player;
 
-import org.minimax.Cell;
+import org.minimax.Color;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -15,7 +15,7 @@ public enum PlayerType {
 		m_class = aClass;
 	}
 
-	public Player getNewPlayer(final Cell color, final int turnOrder) {
+	public Player getNewPlayer(final Color color, final int turnOrder) {
 		try {
 			return (Player) m_class.getDeclaredConstructors()[0].newInstance(color, turnOrder);
 		} catch (final InstantiationException | IllegalAccessException | InvocationTargetException e) {

@@ -2,7 +2,7 @@ package org.minimax;
 
 import java.util.List;
 
-public enum Cell {
+public enum Color {
 	NONE(-1,  null),
 	RED(0, "\033[0;91m"),
 	YELLOW(1, "\033[0;93m"),
@@ -12,14 +12,14 @@ public enum Cell {
 	CYAN(5, "\033[0;96m"),
 	;
 
-	public static final List<Cell> COLORS = List.of(
+	public static final List<Color> COLORS = List.of(
 			RED, YELLOW, GREEN, BLUE, PURPLE, CYAN
 	);
 
 	private final int m_id;
 	private final String m_ansiColor;
 
-	Cell(final int id, final String ansiColor) {
+	Color(final int id, final String ansiColor) {
 		m_id = id;
 		m_ansiColor = ansiColor;
 	}

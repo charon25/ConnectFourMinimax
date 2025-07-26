@@ -28,7 +28,7 @@ public final class Game {
 
 		final Player[] players = new Player[playerCount];
 		for (int i = 0; i < playerCount; i++) {
-			players[i] = playerTypes[i].getNewPlayer(Cell.COLORS.get(i), i);
+			players[i] = playerTypes[i].getNewPlayer(Color.COLORS.get(i), i);
 			players[i].init();
 		}
 
@@ -41,7 +41,7 @@ public final class Game {
 		while (true) {
 			System.out.println(TURN_DELIMITER);
 			final Player player = players[currentlyPlaying];
-			final Cell playerColor = Cell.COLORS.get(currentlyPlaying);
+			final Color playerColor = Color.COLORS.get(currentlyPlaying);
 
 			final int column = player.play(board.copy());
 			final boolean result = board.play(playerColor, column);

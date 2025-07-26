@@ -1,7 +1,7 @@
 package org.minimax.player;
 
 import org.minimax.Board;
-import org.minimax.Cell;
+import org.minimax.Color;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import static org.minimax.Constants.IN;
 
 public class HumanPlayer extends Player {
 
-	public HumanPlayer(final Cell color, final int turnOrder) {
+	public HumanPlayer(final Color color, final int turnOrder) {
 		super(color, turnOrder);
 	}
 

@@ -1,23 +1,23 @@
 package org.minimax.player;
 
 import org.minimax.Board;
-import org.minimax.Cell;
+import org.minimax.Color;
 
 public abstract class Player {
 
-	private final Cell m_color;
+	private final Color m_color;
 	private final int m_turnOrder;
 
 	/**
 	 * @param turnOrder between 0 and playerCount - 1
 	 * @param color color this player will play with
 	 */
-	protected Player(final Cell color, final int turnOrder) {
+	protected Player(final Color color, final int turnOrder) {
 		m_color = color;
 		m_turnOrder = turnOrder;
 	}
 
-	protected Cell getColor() {
+	protected Color getColor() {
 		return m_color;
 	}
 

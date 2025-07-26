@@ -11,20 +11,20 @@ public class Board {
 	private final int m_height;
 	private final int m_countToWin;
 
-	private final Cell[][] m_board;
+	private final Color[][] m_board;
 	private final int[] m_columnHeights;
 
-	private final List<Cell> m_colors;
+	private final List<Color> m_colors;
 
 	public Board(final int width, final int height, final int countToWin, final int playerCount) {
 		m_width = width;
 		m_height = height;
 		m_countToWin = countToWin;
 
-		m_board = new Cell[height][width];
+		m_board = new Color[height][width];
 		m_columnHeights = new int[width];
 
-		m_colors = Cell.COLORS.subList(0, playerCount);
+		m_colors = Color.COLORS.subList(0, playerCount);
 
 		resetBoard();
 	}
@@ -32,7 +32,7 @@ public class Board {
 	private void resetBoard() {
 		for (int x = 0; x < m_width; x++) {
 			for (int y = 0; y < m_height; y++) {
-				m_board[y][x] = Cell.NONE;
+				m_board[y][x] = Color.NONE;
 			}
 
 			m_columnHeights[x] = 0;
@@ -53,10 +53,10 @@ public class Board {
 
 	// region ===== PLAY =====
 
-	public boolean play(final Cell cell, final int column) {
+	public boolean play(final Color color, final int column) {
 		if (m_columnHeights[column] == m_height) return false;
 		final int height = m_columnHeights[column];
-		m_board[m_height - 1 - height][column] = cell;
+		m_board[m_height - 1 - height][column] = color;
 		m_columnHeights[column]++;
 		return true;
 	}
@@ -78,7 +78,7 @@ public class Board {
 	public boolean cancel(final int column) {
 		if (m_columnHeights[column] == 0) return false;
 		final int height = m_columnHeights[column];
-		m_board[m_height - height][column] = Cell.NONE;
+		m_board[m_height - height][column] = Color.NONE;
 		m_columnHeights[column]--;
 		return true;
 	}
@@ -100,7 +100,7 @@ public class Board {
 
 		final int cellX = column;
 		final int cellY = m_height - m_columnHeights[column];
-		final Cell color = m_board[cellY][cellX];
+		final Color color = m_board[cellY][cellX];
 
 		// Row
 		int count = 0;
@@ -139,7 +139,7 @@ public class Board {
 		return count >= m_countToWin;
 	}
 
-	public Optional<Cell> getWinner() {
+	public Optional<Color> getWinner() {
 		final int[] count = new int[m_colors.size()];
 
 		// Rows
@@ -147,8 +147,8 @@ public class Board {
 			Arrays.fill(count, 0);
 
 			for (int x = 0; x < m_width; x++) {
-				final Cell cell = m_board[y][x];
-				for (final Cell color : m_colors) {
+				final Color cell = m_board[y][x];
+				for (final Color color : m_colors) {
 					if (cell == color) {
 						count[cell.getId()]++;
 					} else {
@@ -157,7 +157,7 @@ public class Board {
 				}
 			}
 
-			for (final Cell color : m_colors) {
+			for (final Color color : m_colors) {
 				if (count[color.getId()] >= m_countToWin) return Optional.of(color);
 			}
 		}
@@ -167,8 +167,8 @@ public class Board {
 			Arrays.fill(count, 0);
 
 			for (int y = 0; y < m_height; y++) {
-				final Cell cell = m_board[y][x];
-				for (final Cell color : m_colors) {
+				final Color cell = m_board[y][x];
+				for (final Color color : m_colors) {
 					if (cell == color) {
 						count[cell.getId()]++;
 					} else {
@@ -177,7 +177,7 @@ public class Board {
 				}
 			}
 
-			for (final Cell color : m_colors) {
+			for (final Color color : m_colors) {
 				if (count[color.getId()] >= m_countToWin) return Optional.of(color);
 			}
 		}
@@ -188,8 +188,8 @@ public class Board {
 				Arrays.fill(count, 0);
 
 				for (int k = 0; k < m_countToWin; k++) {
-					final Cell cell = m_board[y + k][x + k];
-					for (final Cell color : m_colors) {
+					final Color cell = m_board[y + k][x + k];
+					for (final Color color : m_colors) {
 						if (cell == color) {
 							count[cell.getId()]++;
 						} else {
@@ -198,7 +198,7 @@ public class Board {
 					}
 				}
 
-				for (final Cell color : m_colors) {
+				for (final Color color : m_colors) {
 					if (count[color.getId()] >= m_countToWin) return Optional.of(color);
 				}
 			}
@@ -210,8 +210,8 @@ public class Board {
 				Arrays.fill(count, 0);
 
 				for (int k = 0; k < m_countToWin; k++) {
-					final Cell cell = m_board[y - k][x + k];
-					for (final Cell color : m_colors) {
+					final Color cell = m_board[y - k][x + k];
+					for (final Color color : m_colors) {
 						if (cell == color) {
 							count[cell.getId()]++;
 						} else {
@@ -220,7 +220,7 @@ public class Board {
 					}
 				}
 
-				for (final Cell color : m_colors) {
+				for (final Color color : m_colors) {
 					if (count[color.getId()] >= m_countToWin) return Optional.of(color);
 				}
 			}

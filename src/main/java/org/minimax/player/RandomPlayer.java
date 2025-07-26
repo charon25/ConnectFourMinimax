@@ -1,7 +1,7 @@
 package org.minimax.player;
 
 import org.minimax.Board;
-import org.minimax.Cell;
+import org.minimax.Color;
 
 import java.util.List;
 import java.util.Random;
@@ -10,7 +10,7 @@ public class RandomPlayer extends Player {
 
 	private final Random m_random;
 
-	public RandomPlayer(final Cell color, final int turnOrder) {
+	public RandomPlayer(final Color color, final int turnOrder) {
 		super(color, turnOrder);
 		m_random = new Random();
 	}
