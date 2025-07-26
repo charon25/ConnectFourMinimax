@@ -63,6 +63,13 @@ public class Board implements BoardInterface {
 		return true;
 	}
 
+	public boolean isFull() {
+		for (int x = 0; x < m_width; x++) {
+			if (canPlay(x)) return false;
+		}
+		return true;
+	}
+
 	// endregion
 
 	/**
