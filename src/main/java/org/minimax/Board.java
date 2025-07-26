@@ -235,6 +235,11 @@ public class Board implements BoardInterface {
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder();
+		sb.append(' ');
+		for (int x = 0; x < m_width; x++) {
+			sb.append(x + 1).append(' ');
+		}
+		sb.append('\n');
 		for (int y = 0; y < m_height; y++) {
 			sb.append('|');
 			for (int x = 0; x < m_width; x++) {

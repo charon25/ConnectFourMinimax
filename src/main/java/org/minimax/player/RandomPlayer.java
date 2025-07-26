@@ -6,15 +6,17 @@ import org.minimax.Cell;
 import java.util.List;
 import java.util.Random;
 
-public class RandomPlayer implements Player {
+public class RandomPlayer extends Player {
 
-	private int m_turnOrder;
-	private Random m_random;
+	private final Random m_random;
+
+	public RandomPlayer(final Cell color, final int turnOrder) {
+		super(color, turnOrder);
+		m_random = new Random();
+	}
 
 	@Override
-	public void init(final int turnOrder, final Cell color) {
-		m_turnOrder = turnOrder;
-		m_random = new Random();
+	public void init() {
 	}
 
 	@Override
@@ -24,7 +26,7 @@ public class RandomPlayer implements Player {
 	}
 
 	@Override
-	public String toString() {
-		return "Random[" + m_turnOrder + ']';
+	protected String name() {
+		return "Random";
 	}
 }

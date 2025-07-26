@@ -14,8 +14,8 @@ public final class Game {
 		final int playerCount = playerTypes.length;
 		final Player[] players = new Player[playerCount];
 		for (int i = 0; i < playerCount; i++) {
-			players[i] = playerTypes[i].getNewPlayer();
-			players[i].init(i, Cell.COLORS.get(i));
+			players[i] = playerTypes[i].getNewPlayer(Cell.COLORS.get(i), i);
+			players[i].init();
 		}
 
 		final Board board = new Board(Constants.WIDTH, Constants.HEIGHT);
