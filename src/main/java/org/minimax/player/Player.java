@@ -35,6 +35,6 @@ public abstract class Player {
 
 	@Override
 	public String toString() {
-		return name() + '[' + m_color + ',' + m_turnOrder + ']';
+		return name() + '[' + m_color.getCharacter() + ']';
 	}
 }

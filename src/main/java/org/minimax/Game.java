@@ -9,16 +9,20 @@ public final class Game {
 	private Game() {}
 
 	public static void play(final boolean shufflePlayers, final PlayerType... playerTypes) {
+		final int playerCount = playerTypes.length;
+		if (playerCount > Constants.MAX_PLAYER_COUNT) {
+			throw new IllegalArgumentException("Too many players: max is " + Constants.MAX_PLAYER_COUNT + " but got " + playerCount);
+		}
+
 		if (shufflePlayers) shufflePlayers(playerTypes);
 
-		final int playerCount = playerTypes.length;
 		final Player[] players = new Player[playerCount];
 		for (int i = 0; i < playerCount; i++) {
 			players[i] = playerTypes[i].getNewPlayer(Cell.COLORS.get(i), i);
 			players[i].init();
 		}
 
-		final Board board = new Board(Constants.WIDTH, Constants.HEIGHT);
+		final Board board = new Board(playerCount, Constants.WIDTH, Constants.HEIGHT);
 		int currentlyPlaying = 0;
 		while (true) {
 			final Player player = players[currentlyPlaying];

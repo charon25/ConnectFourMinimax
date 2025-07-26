@@ -6,12 +6,14 @@ import static org.minimax.Constants.COUNT_TO_WIN;
 
 public class Board implements BoardInterface {
 
+	private final List<Cell> m_colors;
 	private final int m_width;
 	private final int m_height;
 	private final Cell[][] m_board;
 	private final int[] m_columnHeights;
 
-	public Board(final int width, final int height) {
+	public Board(final int playerCount, final int width, final int height) {
+		m_colors = Cell.COLORS.subList(0, playerCount);
 		m_width = width;
 		m_height = height;
 		m_board = new Cell[height][width];
@@ -118,7 +120,7 @@ public class Board implements BoardInterface {
 	}
 
 	public Optional<Cell> getWinner() {
-		final int[] count = new int[Cell.COLORS.size()];
+		final int[] count = new int[m_colors.size()];
 
 		// Rows
 		for (int y = 0; y < m_height; y++) {
@@ -126,7 +128,7 @@ public class Board implements BoardInterface {
 
 			for (int x = 0; x < m_width; x++) {
 				final Cell cell = m_board[y][x];
-				for (final Cell color : Cell.COLORS) {
+				for (final Cell color : m_colors) {
 					if (cell == color) {
 						count[cell.getId()]++;
 					} else {
@@ -135,7 +137,7 @@ public class Board implements BoardInterface {
 				}
 			}
 
-			for (final Cell color : Cell.COLORS) {
+			for (final Cell color : m_colors) {
 				if (count[color.getId()] >= COUNT_TO_WIN) return Optional.of(color);
 			}
 		}
@@ -146,7 +148,7 @@ public class Board implements BoardInterface {
 
 			for (int y = 0; y < m_height; y++) {
 				final Cell cell = m_board[y][x];
-				for (final Cell color : Cell.COLORS) {
+				for (final Cell color : m_colors) {
 					if (cell == color) {
 						count[cell.getId()]++;
 					} else {
@@ -155,7 +157,7 @@ public class Board implements BoardInterface {
 				}
 			}
 
-			for (final Cell color : Cell.COLORS) {
+			for (final Cell color : m_colors) {
 				if (count[color.getId()] >= COUNT_TO_WIN) return Optional.of(color);
 			}
 		}
@@ -167,7 +169,7 @@ public class Board implements BoardInterface {
 
 				for (int k = 0; k < COUNT_TO_WIN; k++) {
 					final Cell cell = m_board[y + k][x + k];
-					for (final Cell color : Cell.COLORS) {
+					for (final Cell color : m_colors) {
 						if (cell == color) {
 							count[cell.getId()]++;
 						} else {
@@ -176,7 +178,7 @@ public class Board implements BoardInterface {
 					}
 				}
 
-				for (final Cell color : Cell.COLORS) {
+				for (final Cell color : m_colors) {
 					if (count[color.getId()] >= COUNT_TO_WIN) return Optional.of(color);
 				}
 			}
@@ -189,7 +191,7 @@ public class Board implements BoardInterface {
 
 				for (int k = 0; k < COUNT_TO_WIN; k++) {
 					final Cell cell = m_board[y - k][x + k];
-					for (final Cell color : Cell.COLORS) {
+					for (final Cell color : m_colors) {
 						if (cell == color) {
 							count[cell.getId()]++;
 						} else {
@@ -198,7 +200,7 @@ public class Board implements BoardInterface {
 					}
 				}
 
-				for (final Cell color : Cell.COLORS) {
+				for (final Cell color : m_colors) {
 					if (count[color.getId()] >= COUNT_TO_WIN) return Optional.of(color);
 				}
 			}
@@ -243,7 +245,7 @@ public class Board implements BoardInterface {
 		for (int y = 0; y < m_height; y++) {
 			sb.append('|');
 			for (int x = 0; x < m_width; x++) {
-				sb.append(m_board[y][x].getCharacter()).append('|');
+				sb.append("\u001B[31m").append(m_board[y][x].getCharacter()).append("\u001B[0m").append('|');
 			}
 			sb.append('\n');
 		}
