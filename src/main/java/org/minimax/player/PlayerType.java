@@ -3,9 +3,9 @@ package org.minimax.player;
 import org.minimax.Cell;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.function.Supplier;
 
 public enum PlayerType {
+	HUMAN(HumanPlayer.class),
 	RANDOM(RandomPlayer.class),
 	;
 

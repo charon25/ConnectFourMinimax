@@ -23,8 +23,10 @@ public final class Game {
 		}
 
 		final Board board = new Board(playerCount, Constants.WIDTH, Constants.HEIGHT);
+		System.out.println(board);
 		int currentlyPlaying = 0;
 		while (true) {
+			System.out.println("========================================");
 			final Player player = players[currentlyPlaying];
 			final Cell playerColor = Cell.COLORS.get(currentlyPlaying);
 
@@ -32,7 +34,6 @@ public final class Game {
 			final boolean result = board.play(playerColor, column);
 			if (!result) throw new IllegalArgumentException("Player " + player + " played invalid move: " + column);
 
-			System.out.println("========================================");
 			System.out.println("Player " + player + " played in column " + (column + 1) + '.');
 			System.out.println(board);
 

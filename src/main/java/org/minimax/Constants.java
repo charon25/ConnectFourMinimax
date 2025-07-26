@@ -1,7 +1,11 @@
 package org.minimax;
 
+import java.util.Scanner;
+
 public final class Constants {
 	private Constants() {}
+
+	public static final Scanner IN = new Scanner(System.in);
 
 	public static final String ANSI_COLOR_RESET = "\033[0m";
 

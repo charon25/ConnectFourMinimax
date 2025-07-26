@@ -1,6 +1,5 @@
 package org.minimax.player;
 
-import org.minimax.Board;
 import org.minimax.BoardInterface;
 import org.minimax.Cell;
 
