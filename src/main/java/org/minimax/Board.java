@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class Board {
+public class Board implements BoardInterface {
 
 	private final int m_width;
 	private final int m_height;
@@ -29,6 +29,8 @@ public class Board {
 		}
 	}
 
+	// region ===== PLAY =====
+
 	public boolean play(final Cell cell, final int column) {
 		if (m_columnHeights[column] == m_height) return false;
 		final int height = m_columnHeights[column];
@@ -37,11 +39,13 @@ public class Board {
 		return true;
 	}
 	
+	@Override
 	public boolean canPlay(final int column) {
 		return m_columnHeights[column] < m_height;
 	}
 
-	public List<Integer> playableColumns() {
+	@Override
+	public List<Integer> getPlayableColumns() {
 		final List<Integer> columns = new ArrayList<>(m_width);
 		for (int x = 0; x < m_width; x++) {
 			if (canPlay(x)) {
@@ -58,6 +62,8 @@ public class Board {
 		m_columnHeights[column]--;
 		return true;
 	}
+
+	// endregion
 
 	public Optional<Cell> getWinner() {
 		// Rows
@@ -118,6 +124,31 @@ public class Board {
 
 		return Optional.empty();
 	}
+
+	// region ===== INTERFACE =====
+
+	@Override
+	public int getWidth() {
+		return m_width;
+	}
+
+	@Override
+	public int getHeight() {
+		return m_height;
+	}
+
+	@Override
+	public Cell[][] getBoardCopy() {
+		final Cell[][] copy = new Cell[m_height][m_width];
+		for (int y = 0; y < m_height; y++) {
+			System.arraycopy(m_board[y], 0, copy[y], 0, m_width);
+		}
+
+		return copy;
+	}
+
+
+	// endregion
 
 	@Override
 	public String toString() {
