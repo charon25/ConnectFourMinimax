@@ -92,7 +92,7 @@ public class Board implements BoardInterface {
 
 		// Column
 		count = 0;
-		for (int y = cellY - (COUNT_TO_WIN - 1); y < cellX + COUNT_TO_WIN; y++) {
+		for (int y = cellY - (COUNT_TO_WIN - 1); y < cellY + COUNT_TO_WIN; y++) {
 			if (y < 0 || y >= m_height) continue;
 			count = (m_board[y][cellX] == color ? count + 1 : 0);
 		}
