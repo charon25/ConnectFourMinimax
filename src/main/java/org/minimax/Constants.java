@@ -1,11 +1,14 @@
 package org.minimax;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 public final class Constants {
 	private Constants() {}
 
 	public static final Scanner IN = new Scanner(System.in);
+	public static final boolean UTF8 = System.out.charset() == StandardCharsets.UTF_8;
 
 	public static final String ANSI_COLOR_RESET = "\033[0m";
 

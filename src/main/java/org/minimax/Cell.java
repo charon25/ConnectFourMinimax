@@ -30,6 +30,6 @@ public enum Cell {
 
 	public String getCharacter() {
 		if (m_ansiColor == null) return " ";
-		return m_ansiColor + '●' + Constants.ANSI_COLOR_RESET;
+		return m_ansiColor + (Constants.UTF8 ? '●' : 'O') + Constants.ANSI_COLOR_RESET;
 	}
 }

@@ -249,7 +249,7 @@ public class Board implements BoardInterface {
 			}
 			sb.append('\n');
 		}
-		sb.append("‾".repeat(Math.max(0, 2 * m_width + 1)));
+		sb.append((Constants.UTF8 ? "‾" : "-").repeat(Math.max(0, 2 * m_width + 1)));
 		return sb.toString();
 	}
 }
