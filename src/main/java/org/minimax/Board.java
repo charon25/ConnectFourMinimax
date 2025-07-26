@@ -93,12 +93,14 @@ public class Board {
 	// endregion
 
 	/**
-	 * Returns whether the given color has won after playing in the given column.
-	 * This should be called after {@link Board#play(Cell, int)} with the same arguments.
+	 * Returns whether the last move of the given column resulted in a win.
 	 */
-	public boolean hasWon(final Cell color, final int column) {
+	public boolean hasWon(final int column) {
+		if (m_columnHeights[column] == 0) return false;
+
 		final int cellX = column;
 		final int cellY = m_height - m_columnHeights[column];
+		final Cell color = m_board[cellY][cellX];
 
 		// Row
 		int count = 0;

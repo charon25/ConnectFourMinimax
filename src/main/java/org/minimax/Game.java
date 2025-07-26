@@ -50,7 +50,7 @@ public final class Game {
 			System.out.println("Player " + player + " played in column " + (column + 1) + '.');
 			System.out.println(board);
 
-			if (board.hasWon(playerColor, column)) {
+			if (board.hasWon(column)) {
 				System.out.println("##### Player " + player + " won! #####");
 				break;
 			}
