@@ -52,6 +52,7 @@ public final class Game {
 
 			System.out.println("Player " + player + " played in column " + (column + 1) + '.');
 			System.out.println(board);
+			System.out.println(board.serialize());
 
 			if (board.hasWon(column)) {
 				System.out.println("##### Player " + player + " won! #####");
