@@ -107,16 +107,16 @@ public class Board {
 		for (int x = cellX - (m_countToWin - 1); x < cellX + m_countToWin; x++) {
 			if (x < 0 || x >= m_width) continue;
 			count = (m_board[cellY][x] == color ? count + 1 : 0);
+			if (count >= m_countToWin) return true;
 		}
-		if (count >= m_countToWin) return true;
 
 		// Column
 		count = 0;
 		for (int y = cellY - (m_countToWin - 1); y < cellY + m_countToWin; y++) {
 			if (y < 0 || y >= m_height) continue;
 			count = (m_board[y][cellX] == color ? count + 1 : 0);
+			if (count >= m_countToWin) return true;
 		}
-		if (count >= m_countToWin) return true;
 
 		// Diagonal (top left -> bottom right)
 		count = 0;
@@ -125,8 +125,8 @@ public class Board {
 			final int y = cellY + k;
 			if (x < 0 || x >= m_width || y < 0 || y >= m_height) continue;
 			count = (m_board[y][x] == color ? count + 1 : 0);
+			if (count >= m_countToWin) return true;
 		}
-		if (count >= m_countToWin) return true;
 
 		// Diagonal (top right -> bottom left)
 		count = 0;
@@ -135,8 +135,10 @@ public class Board {
 			final int y = cellY - k;
 			if (x < 0 || x >= m_width || y < 0 || y >= m_height) continue;
 			count = (m_board[y][x] == color ? count + 1 : 0);
+			if (count >= m_countToWin) return true;
 		}
-		return count >= m_countToWin;
+
+		return false;
 	}
 
 	public Optional<Color> getWinner() {
