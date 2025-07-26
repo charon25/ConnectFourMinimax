@@ -32,7 +32,8 @@ public final class Game {
 			final boolean result = board.play(playerColor, column);
 			if (!result) throw new IllegalArgumentException("Player " + player + " played invalid move: " + column);
 
-			System.out.println("Player " + player + " played in column " + (column + 1));
+			System.out.println("========================================");
+			System.out.println("Player " + player + " played in column " + (column + 1) + '.');
 			System.out.println(board);
 
 			if (board.hasWon(playerColor, column)) {
@@ -40,7 +41,7 @@ public final class Game {
 				break;
 			}
 			if (board.isFull()) {
-				System.out.println("##### This game is draw! #####");
+				System.out.println("##### This game is a draw! #####");
 				break;
 			}
 
