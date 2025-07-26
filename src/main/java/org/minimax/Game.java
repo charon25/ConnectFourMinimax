@@ -8,10 +8,20 @@ import java.util.Random;
 public final class Game {
 	private Game() {}
 
-	public static void play(final boolean shufflePlayers, final PlayerType... playerTypes) {
+	private static final String TURN_DELIMITER = "========================================";
+
+	public static void play(final int width, final int height, final int countToWin, final boolean shufflePlayers, final PlayerType... playerTypes) {
 		final int playerCount = playerTypes.length;
 		if (playerCount > Constants.MAX_PLAYER_COUNT) {
 			throw new IllegalArgumentException("Too many players: max is " + Constants.MAX_PLAYER_COUNT + " but got " + playerCount);
+		}
+
+		if (width <= 0 || height <= 0) {
+			throw new IllegalArgumentException("Invalid board size: " + width + 'x' + height);
+		}
+
+		if (countToWin <= 0) {
+			throw new IllegalArgumentException("Invalid count to win: " + countToWin);
 		}
 
 		if (shufflePlayers) shufflePlayers(playerTypes);
@@ -22,11 +32,14 @@ public final class Game {
 			players[i].init();
 		}
 
-		final Board board = new Board(playerCount, Constants.WIDTH, Constants.HEIGHT);
+		final Board board = new Board(width, height, countToWin, playerCount);
+		System.out.println(TURN_DELIMITER);
+		System.out.println("Game started on " + board.getWidth() + 'x' + board.getHeight() + " board:");
 		System.out.println(board);
+
 		int currentlyPlaying = 0;
 		while (true) {
-			System.out.println("========================================");
+			System.out.println(TURN_DELIMITER);
 			final Player player = players[currentlyPlaying];
 			final Cell playerColor = Cell.COLORS.get(currentlyPlaying);
 

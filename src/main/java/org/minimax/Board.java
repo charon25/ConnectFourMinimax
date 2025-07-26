@@ -1,23 +1,31 @@
 package org.minimax;
 
-import java.util.*;
-
-import static org.minimax.Constants.COUNT_TO_WIN;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 public class Board implements BoardInterface {
 
-	private final List<Cell> m_colors;
 	private final int m_width;
 	private final int m_height;
+	private final int m_countToWin;
+
 	private final Cell[][] m_board;
 	private final int[] m_columnHeights;
 
-	public Board(final int playerCount, final int width, final int height) {
-		m_colors = Cell.COLORS.subList(0, playerCount);
+	private final List<Cell> m_colors;
+
+	public Board(final int width, final int height, final int countToWin, final int playerCount) {
 		m_width = width;
 		m_height = height;
+		m_countToWin = countToWin;
+
 		m_board = new Cell[height][width];
 		m_columnHeights = new int[width];
+
+		m_colors = Cell.COLORS.subList(0, playerCount);
+
 		resetBoard();
 	}
 
@@ -84,39 +92,39 @@ public class Board implements BoardInterface {
 
 		// Row
 		int count = 0;
-		for (int x = cellX - (COUNT_TO_WIN - 1); x < cellX + COUNT_TO_WIN; x++) {
+		for (int x = cellX - (m_countToWin - 1); x < cellX + m_countToWin; x++) {
 			if (x < 0 || x >= m_width) continue;
 			count = (m_board[cellY][x] == color ? count + 1 : 0);
 		}
-		if (count >= COUNT_TO_WIN) return true;
+		if (count >= m_countToWin) return true;
 
 		// Column
 		count = 0;
-		for (int y = cellY - (COUNT_TO_WIN - 1); y < cellY + COUNT_TO_WIN; y++) {
+		for (int y = cellY - (m_countToWin - 1); y < cellY + m_countToWin; y++) {
 			if (y < 0 || y >= m_height) continue;
 			count = (m_board[y][cellX] == color ? count + 1 : 0);
 		}
-		if (count >= COUNT_TO_WIN) return true;
+		if (count >= m_countToWin) return true;
 
 		// Diagonal (top left -> bottom right)
 		count = 0;
-		for (int k = -(COUNT_TO_WIN - 1); k < COUNT_TO_WIN; k++) {
+		for (int k = -(m_countToWin - 1); k < m_countToWin; k++) {
 			final int x = cellX + k;
 			final int y = cellY + k;
 			if (x < 0 || x >= m_width || y < 0 || y >= m_height) continue;
 			count = (m_board[y][x] == color ? count + 1 : 0);
 		}
-		if (count >= COUNT_TO_WIN) return true;
+		if (count >= m_countToWin) return true;
 
 		// Diagonal (top right -> bottom left)
 		count = 0;
-		for (int k = -(COUNT_TO_WIN - 1); k < COUNT_TO_WIN; k++) {
+		for (int k = -(m_countToWin - 1); k < m_countToWin; k++) {
 			final int x = cellX + k;
 			final int y = cellY - k;
 			if (x < 0 || x >= m_width || y < 0 || y >= m_height) continue;
 			count = (m_board[y][x] == color ? count + 1 : 0);
 		}
-		return count >= COUNT_TO_WIN;
+		return count >= m_countToWin;
 	}
 
 	public Optional<Cell> getWinner() {
@@ -138,7 +146,7 @@ public class Board implements BoardInterface {
 			}
 
 			for (final Cell color : m_colors) {
-				if (count[color.getId()] >= COUNT_TO_WIN) return Optional.of(color);
+				if (count[color.getId()] >= m_countToWin) return Optional.of(color);
 			}
 		}
 
@@ -158,16 +166,16 @@ public class Board implements BoardInterface {
 			}
 
 			for (final Cell color : m_colors) {
-				if (count[color.getId()] >= COUNT_TO_WIN) return Optional.of(color);
+				if (count[color.getId()] >= m_countToWin) return Optional.of(color);
 			}
 		}
 
 		// Diagonals (top left -> bottom right)
-		for (int y = 0; y < m_height - (COUNT_TO_WIN - 1); y++) {
-			for (int x = 0; x < m_width - (COUNT_TO_WIN - 1); x++) {
+		for (int y = 0; y < m_height - (m_countToWin - 1); y++) {
+			for (int x = 0; x < m_width - (m_countToWin - 1); x++) {
 				Arrays.fill(count, 0);
 
-				for (int k = 0; k < COUNT_TO_WIN; k++) {
+				for (int k = 0; k < m_countToWin; k++) {
 					final Cell cell = m_board[y + k][x + k];
 					for (final Cell color : m_colors) {
 						if (cell == color) {
@@ -179,17 +187,17 @@ public class Board implements BoardInterface {
 				}
 
 				for (final Cell color : m_colors) {
-					if (count[color.getId()] >= COUNT_TO_WIN) return Optional.of(color);
+					if (count[color.getId()] >= m_countToWin) return Optional.of(color);
 				}
 			}
 		}
 
 		// Diagonals (top right -> bottom left)
-		for (int y = COUNT_TO_WIN - 1; y < m_height; y++) {
-			for (int x = 0; x < m_width - (COUNT_TO_WIN - 1); x++) {
+		for (int y = m_countToWin - 1; y < m_height; y++) {
+			for (int x = 0; x < m_width - (m_countToWin - 1); x++) {
 				Arrays.fill(count, 0);
 
-				for (int k = 0; k < COUNT_TO_WIN; k++) {
+				for (int k = 0; k < m_countToWin; k++) {
 					final Cell cell = m_board[y - k][x + k];
 					for (final Cell color : m_colors) {
 						if (cell == color) {
@@ -201,7 +209,7 @@ public class Board implements BoardInterface {
 				}
 
 				for (final Cell color : m_colors) {
-					if (count[color.getId()] >= COUNT_TO_WIN) return Optional.of(color);
+					if (count[color.getId()] >= m_countToWin) return Optional.of(color);
 				}
 			}
 		}
