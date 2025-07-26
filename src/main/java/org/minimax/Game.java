@@ -43,7 +43,7 @@ public final class Game {
 			final Player player = players[currentlyPlaying];
 			final Cell playerColor = Cell.COLORS.get(currentlyPlaying);
 
-			final int column = player.play(board);
+			final int column = player.play(board.copy());
 			final boolean result = board.play(playerColor, column);
 			if (!result) throw new IllegalArgumentException("Player " + player + " played invalid move: " + column);
 

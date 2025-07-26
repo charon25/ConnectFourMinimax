@@ -1,6 +1,6 @@
 package org.minimax.player;
 
-import org.minimax.BoardInterface;
+import org.minimax.Board;
 import org.minimax.Cell;
 
 import java.util.List;
@@ -20,7 +20,7 @@ public class RandomPlayer extends Player {
 	}
 
 	@Override
-	public int play(final BoardInterface board) {
+	public int play(final Board board) {
 		final List<Integer> playable = board.getPlayableColumns();
 		return playable.get(m_random.nextInt(playable.size()));
 	}

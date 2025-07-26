@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-public class Board implements BoardInterface {
+public class Board {
 
 	private final int m_width;
 	private final int m_height;
@@ -39,6 +39,18 @@ public class Board implements BoardInterface {
 		}
 	}
 
+	/**
+	 * The copy must share no reference with the original.
+	 */
+	public Board copy() {
+		final Board copy = new Board(m_width, m_height, m_countToWin, m_colors.size());
+		System.arraycopy(m_columnHeights, 0, copy.m_columnHeights, 0, copy.m_columnHeights.length);
+		for (int y = 0; y < m_height; y++) {
+			System.arraycopy(m_board[y], 0, copy.m_board[y], 0, m_width);
+		}
+		return copy;
+	}
+
 	// region ===== PLAY =====
 
 	public boolean play(final Cell cell, final int column) {
@@ -49,12 +61,10 @@ public class Board implements BoardInterface {
 		return true;
 	}
 	
-	@Override
 	public boolean canPlay(final int column) {
 		return m_columnHeights[column] < m_height;
 	}
 
-	@Override
 	public List<Integer> getPlayableColumns() {
 		final List<Integer> columns = new ArrayList<>(m_width);
 		for (int x = 0; x < m_width; x++) {
@@ -219,26 +229,13 @@ public class Board implements BoardInterface {
 
 	// region ===== INTERFACE =====
 
-	@Override
 	public int getWidth() {
 		return m_width;
 	}
 
-	@Override
 	public int getHeight() {
 		return m_height;
 	}
-
-	@Override
-	public Cell[][] getBoardCopy() {
-		final Cell[][] copy = new Cell[m_height][m_width];
-		for (int y = 0; y < m_height; y++) {
-			System.arraycopy(m_board[y], 0, copy[y], 0, m_width);
-		}
-
-		return copy;
-	}
-
 
 	// endregion
 

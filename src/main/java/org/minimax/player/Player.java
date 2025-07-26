@@ -1,6 +1,6 @@
 package org.minimax.player;
 
-import org.minimax.BoardInterface;
+import org.minimax.Board;
 import org.minimax.Cell;
 
 public abstract class Player {
@@ -28,7 +28,7 @@ public abstract class Player {
 	public abstract void init();
 
 	// Use interface so players cannot alter the board directly
-	public abstract int play(final BoardInterface board);
+	public abstract int play(final Board board);
 
 	protected abstract String name();
 

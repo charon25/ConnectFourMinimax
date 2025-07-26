@@ -1,6 +1,6 @@
 package org.minimax.player;
 
-import org.minimax.BoardInterface;
+import org.minimax.Board;
 import org.minimax.Cell;
 
 import java.util.List;
@@ -18,7 +18,7 @@ public class HumanPlayer extends Player {
 	}
 
 	@Override
-	public int play(final BoardInterface board) {
+	public int play(final Board board) {
 		final List<Integer> playableColumns = board.getPlayableColumns();
 		int column;
 		do {
