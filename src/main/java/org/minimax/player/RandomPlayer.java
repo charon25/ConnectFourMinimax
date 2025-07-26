@@ -10,8 +10,8 @@ public class RandomPlayer extends Player {
 
 	private final Random m_random;
 
-	public RandomPlayer(final Color color, final int turnOrder) {
-		super(color, turnOrder);
+	public RandomPlayer(final Color color, final List<Color> players) {
+		super(color, players);
 		m_random = new Random();
 	}
 

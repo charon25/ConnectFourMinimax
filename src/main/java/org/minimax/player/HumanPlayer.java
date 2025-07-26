@@ -9,8 +9,8 @@ import static org.minimax.Constants.IN;
 
 public class HumanPlayer extends Player {
 
-	public HumanPlayer(final Color color, final int turnOrder) {
-		super(color, turnOrder);
+	public HumanPlayer(final Color color, final List<Color> players) {
+		super(color, players);
 	}
 
 	@Override

@@ -3,26 +3,34 @@ package org.minimax.player;
 import org.minimax.Board;
 import org.minimax.Color;
 
+import java.util.List;
+
 public abstract class Player {
 
 	private final Color m_color;
 	private final int m_turnOrder;
+	private final List<Color> m_players;
 
 	/**
-	 * @param turnOrder between 0 and playerCount - 1
 	 * @param color color this player will play with
+	 * @param players list of all players in order of play
 	 */
-	protected Player(final Color color, final int turnOrder) {
+	protected Player(final Color color, final List<Color> players) {
 		m_color = color;
-		m_turnOrder = turnOrder;
+		m_turnOrder = players.indexOf(color);
+		m_players = players;
 	}
 
 	protected Color getColor() {
 		return m_color;
 	}
 
-	protected int getTurnOrder() {
+	public int getTurnOrder() {
 		return m_turnOrder;
+	}
+
+	public int getPlayerCount() {
+		return m_players.size();
 	}
 
 	public abstract void init();

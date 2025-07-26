@@ -3,6 +3,8 @@ package org.minimax;
 import org.minimax.player.Player;
 import org.minimax.player.PlayerType;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 public final class Game {
@@ -27,8 +29,9 @@ public final class Game {
 		if (shufflePlayers) shufflePlayers(playerTypes);
 
 		final Player[] players = new Player[playerCount];
+		final List<Color> playerColors = Collections.unmodifiableList(Color.COLORS.subList(0, playerCount));
 		for (int i = 0; i < playerCount; i++) {
-			players[i] = playerTypes[i].getNewPlayer(Color.COLORS.get(i), i);
+			players[i] = playerTypes[i].instantiate(Color.COLORS.get(i), playerColors);
 			players[i].init();
 		}
 

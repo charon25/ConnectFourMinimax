@@ -2,24 +2,22 @@ package org.minimax.player;
 
 import org.minimax.Color;
 
-import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 public enum PlayerType {
-	HUMAN(HumanPlayer.class),
-	RANDOM(RandomPlayer.class),
+	HUMAN {
+		@Override
+		public Player instantiate(final Color color, final List<Color> players) {
+			return new HumanPlayer(color, players);
+		}
+	},
+	RANDOM {
+		@Override
+		public Player instantiate(final Color color, final List<Color> players) {
+			return new RandomPlayer(color, players);
+		}
+	},
 	;
 
-	private final Class<? extends Player> m_class;
-
-	PlayerType(final Class<? extends Player> aClass) {
-		m_class = aClass;
-	}
-
-	public Player getNewPlayer(final Color color, final int turnOrder) {
-		try {
-			return (Player) m_class.getDeclaredConstructors()[0].newInstance(color, turnOrder);
-		} catch (final InstantiationException | IllegalAccessException | InvocationTargetException e) {
-			throw new RuntimeException("Could not instantiate player of type " + this,e);
-		}
-	}
+	public abstract Player instantiate(final Color color, final List<Color> players);
 }
