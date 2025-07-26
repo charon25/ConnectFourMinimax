@@ -13,6 +13,7 @@ public class Board {
 
 	private final Color[][] m_board;
 	private final int[] m_columnHeights;
+	private final int[] m_playedCount;
 
 	private final List<Color> m_colors;
 
@@ -23,6 +24,7 @@ public class Board {
 
 		m_board = new Color[height][width];
 		m_columnHeights = new int[width];
+		m_playedCount = new int[playerCount];
 
 		m_colors = Color.COLORS.subList(0, playerCount);
 
@@ -44,10 +46,11 @@ public class Board {
 	 */
 	public Board copy() {
 		final Board copy = new Board(m_width, m_height, m_countToWin, m_colors.size());
-		System.arraycopy(m_columnHeights, 0, copy.m_columnHeights, 0, copy.m_columnHeights.length);
+		System.arraycopy(m_columnHeights, 0, copy.m_columnHeights, 0, m_columnHeights.length);
 		for (int y = 0; y < m_height; y++) {
 			System.arraycopy(m_board[y], 0, copy.m_board[y], 0, m_width);
 		}
+		System.arraycopy(m_playedCount, 0, copy.m_playedCount, 0, m_playedCount.length);
 		return copy;
 	}
 
@@ -58,6 +61,7 @@ public class Board {
 		final int height = m_columnHeights[column];
 		m_board[m_height - 1 - height][column] = color;
 		m_columnHeights[column]++;
+		m_playedCount[color.getId()]++;
 		return true;
 	}
 	
@@ -78,8 +82,10 @@ public class Board {
 	public boolean cancel(final int column) {
 		if (m_columnHeights[column] == 0) return false;
 		final int height = m_columnHeights[column];
+		final Color color = m_board[m_height - height][column];
 		m_board[m_height - height][column] = Color.NONE;
 		m_columnHeights[column]--;
+		m_playedCount[color.getId()]--;
 		return true;
 	}
 
@@ -101,6 +107,7 @@ public class Board {
 		final int cellX = column;
 		final int cellY = m_height - m_columnHeights[column];
 		final Color color = m_board[cellY][cellX];
+		if (m_playedCount[color.getId()] < m_countToWin) return false;
 
 		// Row
 		int count = 0;
