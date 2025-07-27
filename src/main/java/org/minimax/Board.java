@@ -8,6 +8,7 @@ public class Board {
 	private final int m_height;
 	private final int m_countToWin;
 
+	private final int m_bitsByColor;
 	private final Color[][] m_board;
 	private final BitSet m_boardBitset;
 	private final int[] m_columnHeights;
@@ -20,8 +21,9 @@ public class Board {
 		m_height = height;
 		m_countToWin = countToWin;
 
+		m_bitsByColor = Integer.SIZE - Integer.numberOfLeadingZeros(playerCount);
 		m_board = new Color[height][width];
-		m_boardBitset = new BitSet(Constants.BITS_BY_COLOR * m_width * m_height);
+		m_boardBitset = new BitSet(m_bitsByColor * m_width * m_height);
 		m_columnHeights = new int[width];
 		m_playedCount = new int[playerCount];
 
@@ -108,8 +110,8 @@ public class Board {
 	private void updateBitSet(final int x, final int y) {
 		final int value = m_board[y][x].ordinal();
 		final int p = y * m_width + x;
-		for (int k = 0; k < Constants.BITS_BY_COLOR; k++) {
-			m_boardBitset.set(Constants.BITS_BY_COLOR * p + k, ((value >> k) & 1) > 0);
+		for (int k = 0; k < m_bitsByColor; k++) {
+			m_boardBitset.set(m_bitsByColor * p + k, ((value >> k) & 1) > 0);
 		}
 	}
 
