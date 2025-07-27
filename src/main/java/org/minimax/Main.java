@@ -8,14 +8,18 @@ public class Main {
 
 	public static void main(String[] args) {
 		if (args.length >= 1 && Constants.PROFILE_ARG.equals(args[0])) {
+			final int count = args.length >= 2 ? Integer.parseInt(args[1]) : 1;
 			RandomHelper.setSeed(3141592653589793238L);
 			final long start = System.nanoTime();
-			Game.play(
-					Constants.DEFAULT_WIDTH, Constants.DEFAULT_HEIGHT, Constants.DEFAULT_COUNT_TO_WIN, false,
-					PlayerType.SIMPLE_MINIMAX_12, PlayerType.SIMPLE_MINIMAX_12
-			);
+			for (int i = 0; i < count; i++) {
+				Game.play(
+						Constants.DEFAULT_WIDTH, Constants.DEFAULT_HEIGHT, Constants.DEFAULT_COUNT_TO_WIN, false,
+						PlayerType.SIMPLE_MINIMAX_12, PlayerType.SIMPLE_MINIMAX_12
+				);
+			}
 			final long end = System.nanoTime();
-			System.out.println("Duration: " + (float) (end - start) / Constants.ONE_BILLION + " s");
+			System.out.println("Total duration: " + (end - start) / Constants.ONE_BILLION + " s");
+			System.out.println("Average duration: " + (end - start) / (count * Constants.ONE_BILLION) + " s");
 			return;
 		}
 

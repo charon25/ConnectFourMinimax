@@ -6,7 +6,7 @@ import java.util.Scanner;
 public final class Constants {
 	private Constants() {}
 
-	public static final int ONE_BILLION = 1_000_000_000;
+	public static final double ONE_BILLION = 1_000_000_000.0d;
 
 	public static final Scanner IN = new Scanner(System.in);
 	public static final boolean UTF8 = System.out.charset() == StandardCharsets.UTF_8;
