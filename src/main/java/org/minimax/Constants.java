@@ -13,6 +13,8 @@ public final class Constants {
 
 	public static final String ANSI_COLOR_RESET = "\033[0m";
 
+	public static final int BITS_BY_COLOR = Integer.SIZE - Integer.numberOfLeadingZeros(Color.values().length - 1);
+
 	public static final int MAX_PLAYER_COUNT = Color.COLORS.size();
 	public static final int DEFAULT_PLAYER_COUNT = 2;
 	public static final int DEFAULT_WIDTH = 7;

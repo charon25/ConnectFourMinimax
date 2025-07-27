@@ -3,13 +3,12 @@ package org.minimax.player;
 import org.minimax.Board;
 import org.minimax.Color;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public abstract class MinimaxPlayer extends Player {
 
 	private final Random m_random;
+	private final Map<BitSet, Result> m_cache = new HashMap<>();
 
 	protected MinimaxPlayer(final Color color, final List<Color> players) {
 		super(color, players);
@@ -31,16 +30,23 @@ public abstract class MinimaxPlayer extends Player {
 	}
 
 	private List<Integer> getBestMoves(final Board board) {
+		m_cache.clear();
 		return minimax(board, null, 0, true, Score.worst(), Score.best()).bestColumns;
 	}
 
 	private Result minimax(final Board board, final Integer lastPlayedColumn,
 						   final int depth, final boolean maximizing,
 						   Score alpha, Score beta) {
+		final Result cachedResult = m_cache.get(board.getBoardBitset());
+		if (cachedResult != null) {
+			return cachedResult;
+		}
+
+		final Result iterationResult;
 		if (lastPlayedColumn != null && board.hasWon(lastPlayedColumn)) {
-			return new Result(maximizing ? Score.worst() : Score.best(), List.of(), depth);
+			iterationResult = new Result(maximizing ? Score.worst() : Score.best(), List.of(), depth);
 		} else if (depth >= getMaxDepth()) {
-			return new Result(new Score(computeHeuristic(board), 0), List.of(), null);
+			iterationResult = new Result(new Score(computeHeuristic(board), 0), List.of(), null);
 		} else {
 			final Color color = getColor(maximizing);
 			final List<Integer> playableColumns = board.getPlayableColumns();
@@ -93,8 +99,11 @@ public abstract class MinimaxPlayer extends Player {
 					board.cancel(column);
 				}
 			}
-			return new Result(value.increaseTurnsBeforeEnd(), bestColumns, null);
+			iterationResult = new Result(value.increaseTurnsBeforeEnd(), bestColumns, null);
 		}
+
+		m_cache.put(board.getBoardBitset(), iterationResult);
+		return iterationResult;
 	}
 
 	private Color getColor(final boolean maximizing) {

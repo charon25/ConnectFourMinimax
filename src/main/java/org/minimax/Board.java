@@ -1,9 +1,6 @@
 package org.minimax;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class Board {
 
@@ -12,6 +9,7 @@ public class Board {
 	private final int m_countToWin;
 
 	private final Color[][] m_board;
+	private final BitSet m_boardBitset;
 	private final int[] m_columnHeights;
 	private final int[] m_playedCount;
 
@@ -23,6 +21,7 @@ public class Board {
 		m_countToWin = countToWin;
 
 		m_board = new Color[height][width];
+		m_boardBitset = new BitSet(Constants.BITS_BY_COLOR * m_width * m_height);
 		m_columnHeights = new int[width];
 		m_playedCount = new int[playerCount];
 
@@ -39,6 +38,8 @@ public class Board {
 
 			m_columnHeights[x] = 0;
 		}
+
+		m_boardBitset.clear();
 	}
 
 	/**
@@ -51,6 +52,8 @@ public class Board {
 			System.arraycopy(m_board[y], 0, copy.m_board[y], 0, m_width);
 		}
 		System.arraycopy(m_playedCount, 0, copy.m_playedCount, 0, m_playedCount.length);
+		copy.m_boardBitset.clear();
+		copy.m_boardBitset.or(m_boardBitset);
 		return copy;
 	}
 
@@ -62,6 +65,7 @@ public class Board {
 		m_board[m_height - 1 - height][column] = color;
 		m_columnHeights[column]++;
 		m_playedCount[color.getId()]++;
+		updateBitSet(column, m_height - 1 - height);
 		return true;
 	}
 	
@@ -86,6 +90,7 @@ public class Board {
 		m_board[m_height - height][column] = Color.NONE;
 		m_columnHeights[column]--;
 		m_playedCount[color.getId()]--;
+		updateBitSet(column, m_height - height);
 		return true;
 	}
 
@@ -94,6 +99,22 @@ public class Board {
 			if (canPlay(x)) return false;
 		}
 		return true;
+	}
+
+	// endregion
+
+	// region ===== BIT SET =====
+
+	private void updateBitSet(final int x, final int y) {
+		final int value = m_board[y][x].ordinal();
+		final int p = y * m_width + x;
+		for (int k = 0; k < Constants.BITS_BY_COLOR; k++) {
+			m_boardBitset.set(Constants.BITS_BY_COLOR * p + k, ((value >> k) & 1) > 0);
+		}
+	}
+
+	public BitSet getBoardBitset() {
+		return (BitSet) m_boardBitset.clone();
 	}
 
 	// endregion
