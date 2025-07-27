@@ -50,7 +50,7 @@ public abstract class MinimaxPlayer extends Player {
 			final Color color = getColor(maximizing);
 			final List<Integer> playableColumns = board.getPlayableColumns();
 			Score value;
-			final List<Integer> bestColumns = new ArrayList<>();
+			final List<Integer> bestColumns = new ArrayList<>(board.getWidth());
 			if (maximizing) {
 				value = Score.worst();
 				for (final int column : playableColumns) {
