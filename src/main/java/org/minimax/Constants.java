@@ -6,6 +6,8 @@ import java.util.Scanner;
 public final class Constants {
 	private Constants() {}
 
+	public static final int ONE_BILLION = 1_000_000_000;
+
 	public static final Scanner IN = new Scanner(System.in);
 	public static final boolean UTF8 = System.out.charset() == StandardCharsets.UTF_8;
 
@@ -18,4 +20,6 @@ public final class Constants {
 	public static final int DEFAULT_WIDTH = 7;
 	public static final int DEFAULT_HEIGHT = 6;
 	public static final int DEFAULT_COUNT_TO_WIN = 4;
+
+	public static final String PROFILE_ARG = "--profile";
 }
