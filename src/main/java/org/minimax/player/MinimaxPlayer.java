@@ -26,11 +26,17 @@ public abstract class MinimaxPlayer extends Player {
 		final List<Integer> playableColumns = board.getPlayableColumns();
 		if (playableColumns.size() == 1) return playableColumns.get(0);
 
-		final Result result = minimax(board, null, 0, true);
-		return result.bestColumns.get(m_random.nextInt(result.bestColumns.size()));
+		final List<Integer> bestMoves = getBestMoves(board);
+		return bestMoves.get(m_random.nextInt(bestMoves.size()));
 	}
 
-	private Result minimax(final Board board, final Integer lastPlayedColumn, final int depth, final boolean maximizing) {
+	private List<Integer> getBestMoves(final Board board) {
+		return minimax(board, null, 0, true, Score.worst(), Score.best()).bestColumns;
+	}
+
+	private Result minimax(final Board board, final Integer lastPlayedColumn,
+						   final int depth, final boolean maximizing,
+						   Score alpha, Score beta) {
 		if (lastPlayedColumn != null && board.hasWon(lastPlayedColumn)) {
 			return new Result(maximizing ? Score.worst() : Score.best(), List.of(), depth);
 		} else if (depth >= getMaxDepth()) {
@@ -44,7 +50,8 @@ public abstract class MinimaxPlayer extends Player {
 				value = Score.worst();
 				for (final int column : playableColumns) {
 					board.play(color, column);
-					final Result result = minimax(board, column, depth + 1, false);
+					final Result result = minimax(board, column, depth + 1, false, alpha, beta);
+
 					if (result.score.greaterThan(value)){
 						value = result.score;
 						bestColumns.clear();
@@ -52,13 +59,22 @@ public abstract class MinimaxPlayer extends Player {
 					} else if (result.score.equals(value)) {
 						bestColumns.add(column);
 					}
+
+					if (value.greaterThanOrEqualsTo(beta)) {
+						board.cancel(column);
+						break;
+					}
+
+					alpha = Score.max(alpha, value);
+
 					board.cancel(column);
 				}
 			} else {
 				value = Score.best();
 				for (final int column : playableColumns) {
 					board.play(color, column);
-					final Result result = minimax(board, column, depth + 1, true);
+					final Result result = minimax(board, column, depth + 1, true, alpha, beta);
+
 					if (value.greaterThan(result.score)) {
 						value = result.score;
 						bestColumns.clear();
@@ -66,6 +82,14 @@ public abstract class MinimaxPlayer extends Player {
 					} else if (result.score.equals(value)) {
 						bestColumns.add(column);
 					}
+
+					if (alpha.greaterThan(value)) {
+						board.cancel(column);
+						break;
+					}
+
+					beta = Score.min(beta, value);
+
 					board.cancel(column);
 				}
 			}
@@ -109,6 +133,10 @@ public abstract class MinimaxPlayer extends Player {
 			}
 		}
 
+		boolean greaterThanOrEqualsTo(final Score other) {
+			return greaterThan(other) || equals(other);
+		}
+
 		private static Score worst() {
 			return new Score(0, -1);
 		}
@@ -121,6 +149,14 @@ public abstract class MinimaxPlayer extends Player {
 			if (turnsBeforeEnd == 0) return this;
 			if (turnsBeforeEnd > 0) return new Score(value, turnsBeforeEnd + 1);
 			return new Score(value, turnsBeforeEnd - 1);
+		}
+
+		private static Score max(final Score a, final Score b) {
+			return a.greaterThan(b) ? a : b;
+		}
+
+		private static Score min(final Score a, final Score b) {
+			return a.greaterThan(b) ? b : a;
 		}
 	}
 }
