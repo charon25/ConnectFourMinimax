@@ -5,10 +5,11 @@ import org.minimax.player.PlayerType;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 public final class Game {
 	private Game() {}
+
+	public static boolean s_verbose = false;
 
 	private static final String TURN_DELIMITER = "========================================";
 
@@ -36,13 +37,13 @@ public final class Game {
 		}
 
 		final Board board = new Board(width, height, countToWin, playerCount);
-		System.out.println(TURN_DELIMITER);
-		System.out.println("Game started on " + board.getWidth() + 'x' + board.getHeight() + " board:");
-		System.out.println(board);
+		print(TURN_DELIMITER);
+		print("Game started on " + board.getWidth() + 'x' + board.getHeight() + " board:");
+		print(board);
 
 		int currentlyPlaying = 0;
 		while (true) {
-			System.out.println(TURN_DELIMITER);
+			print(TURN_DELIMITER);
 			final Player player = players[currentlyPlaying];
 			final Color playerColor = Color.COLORS.get(currentlyPlaying);
 
@@ -50,16 +51,16 @@ public final class Game {
 			final boolean result = board.play(playerColor, column);
 			if (!result) throw new IllegalArgumentException("Player " + player + " played invalid move: " + column);
 
-			System.out.println("Player " + player + " played in column " + (column + 1) + '.');
-			System.out.println(board);
-			if (Constants.DEBUG) System.out.println(board.serialize());
+			print("Player " + player + " played in column " + (column + 1) + '.');
+			print(board);
+			print(board.serialize());
 
 			if (board.hasWon(column)) {
-				System.out.println("##### Player " + player + " won! #####");
+				print("##### Player " + player + " won! #####");
 				break;
 			}
 			if (board.isFull()) {
-				System.out.println("##### This game is a draw! #####");
+				print("##### This game is a draw! #####");
 				break;
 			}
 
@@ -68,12 +69,15 @@ public final class Game {
 	}
 
 	private static void shufflePlayers(final PlayerType[] players) {
-		final Random random = new Random();
 		for (int i = players.length - 1; i >= 0; i--) {
-			final int j = random.nextInt(i + 1);
+			final int j = RandomHelper.nextInt(i + 1);
 			final PlayerType temp = players[j];
 			players[j] = players[i];
 			players[i] = temp;
 		}
+	}
+
+	private static void print(final Object object) {
+		if (s_verbose) System.out.println(object);
 	}
 }

@@ -2,18 +2,17 @@ package org.minimax.player;
 
 import org.minimax.Board;
 import org.minimax.Color;
+import org.minimax.RandomHelper;
 
 import java.util.*;
 
 public abstract class MinimaxPlayer extends Player {
 
-	private final Random m_random;
 	private final Map<BitSet, Result> m_cache = new HashMap<>();
 
 	protected MinimaxPlayer(final Color color, final List<Color> players) {
 		super(color, players);
 		if (players.size() != 2) throw new IllegalArgumentException("Minimax player can only play versus one other player");
-		m_random = new Random();
 	}
 
 	protected abstract int getMaxDepth();
@@ -26,7 +25,7 @@ public abstract class MinimaxPlayer extends Player {
 		if (playableColumns.size() == 1) return playableColumns.get(0);
 
 		final List<Integer> bestMoves = getBestMoves(board);
-		return bestMoves.get(m_random.nextInt(bestMoves.size()));
+		return bestMoves.get(RandomHelper.nextInt(bestMoves.size()));
 	}
 
 	private List<Integer> getBestMoves(final Board board) {

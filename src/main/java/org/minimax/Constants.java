@@ -6,8 +6,6 @@ import java.util.Scanner;
 public final class Constants {
 	private Constants() {}
 
-	public static final boolean DEBUG = true;
-
 	public static final Scanner IN = new Scanner(System.in);
 	public static final boolean UTF8 = System.out.charset() == StandardCharsets.UTF_8;
 

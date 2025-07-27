@@ -32,6 +32,7 @@ public class Main {
 			players[i] = getPlayerType(IN.nextLine());
 		}
 
+		Game.s_verbose = true;
 		Game.play(width, height, countToWin, true, players);
 	}
 
