@@ -30,29 +30,30 @@ public abstract class MinimaxPlayer extends Player {
 
 	private List<Integer> getBestMoves(final Board board) {
 		m_cache.clear();
-		return minimax(board, null, 0, true, Score.worst(), Score.best()).bestColumns;
+		return minimax(board, null, 0, true, Score.WORST, Score.BEST).bestColumns;
 	}
 
 	private Result minimax(final Board board, final Integer lastPlayedColumn,
 						   final int depth, final boolean maximizing,
 						   Score alpha, Score beta) {
-		final Result cachedResult = m_cache.get(board.getBoardBitset());
+		final BitSet boardBitset = board.getBoardBitset();
+		final Result cachedResult = m_cache.get(boardBitset);
 		if (cachedResult != null) {
 			return cachedResult;
 		}
 
 		final Result iterationResult;
 		if (lastPlayedColumn != null && board.hasWon(lastPlayedColumn)) {
-			iterationResult = new Result(maximizing ? Score.worst() : Score.best(), List.of(), depth);
+			iterationResult = new Result(maximizing ? Score.WORST : Score.BEST, List.of());
 		} else if (depth >= getMaxDepth()) {
-			iterationResult = new Result(new Score(computeHeuristic(board), 0), List.of(), null);
+			iterationResult = new Result(new Score(computeHeuristic(board), 0), List.of());
 		} else {
 			final Color color = getColor(maximizing);
 			final List<Integer> playableColumns = board.getPlayableColumns();
 			Score value;
 			final List<Integer> bestColumns = new ArrayList<>(board.getWidth());
 			if (maximizing) {
-				value = Score.worst();
+				value = Score.WORST;
 				for (final int column : playableColumns) {
 					board.play(color, column);
 					final Result result = minimax(board, column, depth + 1, false, alpha, beta);
@@ -75,7 +76,7 @@ public abstract class MinimaxPlayer extends Player {
 					board.cancel(column);
 				}
 			} else {
-				value = Score.best();
+				value = Score.BEST;
 				for (final int column : playableColumns) {
 					board.play(color, column);
 					final Result result = minimax(board, column, depth + 1, true, alpha, beta);
@@ -98,10 +99,10 @@ public abstract class MinimaxPlayer extends Player {
 					board.cancel(column);
 				}
 			}
-			iterationResult = new Result(value.increaseTurnsBeforeEnd(), bestColumns, null);
+			iterationResult = new Result(value.increaseTurnsBeforeEnd(), bestColumns);
 		}
 
-		m_cache.put(board.getBoardBitset(), iterationResult);
+		m_cache.put(boardBitset, iterationResult);
 		return iterationResult;
 	}
 
@@ -110,7 +111,7 @@ public abstract class MinimaxPlayer extends Player {
 		return getPlayers().get(1 - getTurnOrder());
 	}
 
-	private record Result(Score score, List<Integer> bestColumns, Integer depthWin) {}
+	private record Result(Score score, List<Integer> bestColumns) {}
 
 	/**
 	 * Represent a score will a different comparison as a normal integer :<br>
@@ -121,6 +122,9 @@ public abstract class MinimaxPlayer extends Player {
 	 *                       if negative, means the opponent will win in X turns
 	 */
 	record Score(int value, int turnsBeforeEnd) {
+		private static final Score WORST = new Score(0, -1);
+		private static final Score BEST = new Score(0, 1);
+		
 		boolean greaterThan(final Score other) {
 			if (turnsBeforeEnd == 0 && other.turnsBeforeEnd == 0) {
 				return value > other.value;
@@ -143,14 +147,6 @@ public abstract class MinimaxPlayer extends Player {
 
 		boolean greaterThanOrEqualsTo(final Score other) {
 			return greaterThan(other) || equals(other);
-		}
-
-		private static Score worst() {
-			return new Score(0, -1);
-		}
-
-		private static Score best() {
-			return new Score(0, 1);
 		}
 
 		private Score increaseTurnsBeforeEnd() {
